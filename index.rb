@@ -2,17 +2,13 @@ require 'Pathname'
 
 class GithubIndex
 
-  def initialize
-    read_config
-    #@base_dir = "/Users/rcrjr/Flatiron/Curriculum/"
-    #@base_repo = "https://github.com/randallreedjr/"
-
+  def initialize(base_dir = "~")
+    @base_dir = base_dir
   end
 
   def generate_index
     write_header
-    puts @base_dir
-    puts @base_repo
+    puts "Reading from #{@base_dir}"
     puts "<ul>"
     process_directory(@base_dir)
     puts "</ul>"
@@ -20,12 +16,6 @@ class GithubIndex
   end
 
   private
-  def read_config
-    file = File.new("config","r")
-    @base_dir = File.join(file.gets.sub("repo base dir:","").strip,"/")
-    @base_repo = "https://github.com/" << file.gets.sub("github user:","").strip
-    file.close
-  end
 
   def write_header
     puts "<!doctype html>"
@@ -49,7 +39,6 @@ class GithubIndex
           puts "</ul>"
         end
       end
-      
     else
       remote = find_git_remote("#{current_directory}/.git/config")
       if remote.empty?
@@ -59,30 +48,6 @@ class GithubIndex
       end
       
     end
-      
-
-
-
-    # weeks.each do |week|
-    #   puts "<li>#{week}"
-    #   puts "<ul>"
-    #   days = Dir.entries("#{base_dir}/#{week}").slice(2..-1)
-    #   days.each do |day|
-    #     puts "<li>#{day}"
-    #     repos = Dir.entries("#{base_dir}/#{week}/#{day}").slice(2..-1)
-    #     puts "<ul>"
-    #     repos.each do |repo|
-    #       if Dir.entries("#{base_dir}/#{week}/#{day}/#{repo}").include?(".git")
-    #         puts "<li><a href = #{base_repo}#{repo}>#{repo}</a>" 
-    #       else
-    #         puts "<li>#{repo}"
-    #       end
-    #     end
-    #     puts "</ul>"
-    #   end
-    #   puts "</ul>"
-    # end
-
   end
 
   def write_footer
@@ -108,6 +73,3 @@ class GithubIndex
     return remote
   end
 end
-
-index = GithubIndex.new
-index.generate_index

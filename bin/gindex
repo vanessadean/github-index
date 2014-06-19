@@ -1,2 +1,16 @@
-#!usr/bin/env ruby
-require-relative '../index.rb'
+#!/usr/bin/env ruby
+
+require_relative '../index.rb'
+
+puts "What directory would you like to map?"
+directory = gets.chomp
+path = Pathname.new(directory)
+if path.relative?
+  path = path.expand_path
+end
+file = "#{path}/index.html"
+puts file
+$stdout.reopen(file, "w")
+index = GithubIndex.new(path)
+index.generate_index
+`open #{file}`
