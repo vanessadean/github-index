@@ -1,3 +1,4 @@
+require_relative 'gitindex.rb'
 class GitIndexCLI
   def call
     puts "What directory would you like to map?"
