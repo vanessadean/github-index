@@ -8,7 +8,7 @@ class GitIndexCLI
         path = path.expand_path
       end
       file = "#{path}/index.html"
-      puts file
+      puts "Mapping #{path}..."
       $stdout.reopen(file, "w")
       index = GithubIndex.new(path)
       index.generate_index
