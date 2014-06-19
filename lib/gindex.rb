@@ -1,5 +1,3 @@
-require 'Pathname'
-
 class GithubIndex
 
   def initialize(base_dir = "~")
