@@ -42,17 +42,15 @@ class GithubIndex
         end
       end
     else
-      print_repo(current_directory)      
+      puts print_repo(current_directory)      
     end
   end
 
   def print_repo(current_directory)
-      remote = find_remote(current_directory)
-      if remote.empty?
-        puts "<li>#{@path.basename}"
-      else
-        puts "<li><a href=\"#{remote}\">#{@path.basename}</a>"
-      end
+    repo = "#{@path.basename}"
+    remote = find_remote(current_directory)
+    repo = "<a href=\"#{remote}\">#{repo}</a>" unless remote.empty?
+    return "<li>#{repo}"
   end
 
   def find_remote(current_directory)
@@ -67,6 +65,5 @@ class GithubIndex
 </html>
     HTML
   end
-
 
 end
