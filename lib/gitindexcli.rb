@@ -1,21 +1,46 @@
 require_relative 'gitindex.rb'
+require 'pathname'
 class GitIndexCLI
+  attr_reader :directory, :path
   def call
+    greeting
+    input = gets.chomp
+    if input.downcase != "exit"
+      directory_from_input(input)
+      determine_path
+      filename = create_file
+      `open #{filename}`
+    end
+  end
+
+  private
+  def greeting
     puts "What directory would you like to map?"
     puts "(leave blank for present working directory)"
-    directory = gets.chomp
-    if directory.downcase != "exit"
-      directory = (Dir.pwd) if directory.strip.empty?
-      path = Pathname.new(directory)
-      if path.relative?
-        path = path.expand_path
-      end
-      file = "#{path}/index.html"
-      puts "Mapping #{path}..."
-      $stdout.reopen(file, "w")
-      index = GithubIndex.new(path)
-      index.generate_index
-      `open #{file}`
+  end
+
+  def directory_from_input(input)
+    if input.strip.empty?
+      @directory = (Dir.pwd) 
+    else
+      @directory = input
     end
+  end
+
+  def determine_path
+    puts "Dir #{@directory}"
+    @path = Pathname.new(@directory)
+    if path.relative?
+      @path = path.expand_path
+    end
+  end
+
+  def create_file
+    file = "#{path}/index.html"
+    puts "Mapping #{path}..."
+    $stdout.reopen(file, "w")
+    index = GithubIndex.new(path)
+    index.generate_index
+    return file
   end
 end
