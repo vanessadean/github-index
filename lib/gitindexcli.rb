@@ -20,11 +20,7 @@ class GitIndexCLI
   end
 
   def directory_from_input(input)
-    if input.strip.empty?
-      @directory = (Dir.pwd) 
-    else
-      @directory = input
-    end
+    input.strip.empty? ? @directory = (Dir.pwd) : @directory = input
   end
 
   def determine_path
