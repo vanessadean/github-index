@@ -7,14 +7,14 @@ class GithubIndex
   def initialize(base_dir = "~")
     @base_dir = base_dir
     @path = ""
+    @index = ""
   end
 
   def generate_index
     puts write_header
     puts "Reading from #{@base_dir}"
-    puts "<ul>"
     process_directory(@base_dir)
-    puts "</ul>"
+    puts "<ul>#{@index}</ul>"
     puts write_footer
   end
 
@@ -33,16 +33,16 @@ class GithubIndex
     contents = Dir.entries(current_directory).slice(2..-1)
     @path = Pathname.new(current_directory)
     if not contents.include?(".git")
-      puts "<li>#{path.basename}"
+      @index << "<li>#{path.basename}"
       contents.each do |content|
         if File.directory?("#{current_directory}/#{content}/")
-          puts "<ul>"
+          @index << "<ul>"
           process_directory("#{current_directory}/#{content}/")
-          puts "</ul>"
+          @index << "</ul>"
         end
       end
     else
-      puts print_repo(current_directory)      
+      @index << print_repo(current_directory)      
     end
   end
 
