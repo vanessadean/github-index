@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'Traverses your directory structure, starting at a specified location, and creates an HTML tree of your git repositories. Will also link to the origin remote if it exists.'
   s.authors     = ['Randall Reed, Jr.']
   s.email       = ['randallreedjr@gmail.com']
-  s.files       = ['lib/gitindex.rb','lib/gitindexcli.rb']
+  s.files       = ['lib/gitindex.rb','lib/gitindexcli.rb', 'lib/gitrepo.rb']
   s. executables << 'gitindex'
   s.homepage    = 'https://rubygems.org/gems/gitindex'
 end
