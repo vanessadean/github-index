@@ -1,7 +1,12 @@
+require_relative 'gitrepo.rb'
+
 class GithubIndex
+
+  attr_reader :path
 
   def initialize(base_dir = "~")
     @base_dir = base_dir
+    @path = ""
   end
 
   def generate_index
@@ -25,9 +30,8 @@ class GithubIndex
   end
 
   def process_directory(current_directory)
-    #if directory has .git directory, 
     contents = Dir.entries(current_directory).slice(2..-1)
-    path = Pathname.new(current_directory)
+    @path = Pathname.new(current_directory)
     if not contents.include?(".git")
       puts "<li>#{path.basename}"
       contents.each do |content|
@@ -38,14 +42,22 @@ class GithubIndex
         end
       end
     else
-      remote = find_git_remote("#{current_directory}/.git/config")
-      if remote.empty?
-        puts "<li>#{path.basename}"
-      else
-        puts "<li><a href=\"#{remote}\">#{path.basename}</a>"
-      end
-      
+      print_repo(current_directory)      
     end
+  end
+
+  def print_repo(current_directory)
+      remote = find_remote(current_directory)
+      if remote.empty?
+        puts "<li>#{@path.basename}"
+      else
+        puts "<li><a href=\"#{remote}\">#{@path.basename}</a>"
+      end
+  end
+
+  def find_remote(current_directory)
+    repo = GitRepo.new("#{current_directory}/.git/config")
+    repo.find_remote
   end
 
   def write_footer
@@ -56,16 +68,5 @@ class GithubIndex
     HTML
   end
 
-  def find_git_remote(filename)
-    remote = ""
-    file = File.new(filename, "r")
-    while (line = file.gets)
-      if line.start_with?("[remote")
-        remote = file.gets.gsub("url = git@github.com:", "https://github.com/")
-        break
-      end
-    end
-    file.close
-    return remote
-  end
+
 end
