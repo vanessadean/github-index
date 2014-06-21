@@ -24,19 +24,15 @@ class GitIndexCLI
   end
 
   def determine_path
-    puts "Dir #{@directory}"
-    @path = Pathname.new(@directory)
-    if path.relative?
-      @path = path.expand_path
-    end
+    @path = Pathname.new(directory)
+    @path = path.expand_path if path.relative?
   end
 
   def create_file
     file = "#{path}/index.html"
     puts "Mapping #{path}..."
     $stdout.reopen(file, "w")
-    index = GithubIndex.new(path)
-    index.generate_index
+    GithubIndex.new(path).generate_index
     return file
   end
 end
