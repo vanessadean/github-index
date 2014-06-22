@@ -4,7 +4,9 @@ github-index
 Utility to generate an index of your local git repositories
 
 ## Installation
+```bash
 gem install gitindex
+```
 
 ## Usage
 From any directory, run executable with
